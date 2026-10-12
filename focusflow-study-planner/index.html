@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f7fb" />
+    <meta name="description" content="A simple local-first study planner for organizing coursework and tracking progress." />
+    <title>FocusFlow — Study Planner</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="FocusFlow home">
+          <span class="brand-mark" aria-hidden="true">F</span>
+          <span>focusflow</span>
+        </a>
+
+        <div class="sidebar-label">WORKSPACE</div>
+        <nav class="nav-list">
+          <a class="nav-item is-active" href="#planner" aria-current="page"><span class="nav-icon">▦</span> My planner</a>
+          <a class="nav-item" href="#week"><span class="nav-icon">◷</span> This week</a>
+          <a class="nav-item" href="#subjects"><span class="nav-icon">◈</span> Subjects</a>
+        </nav>
+
+        <section class="sidebar-card" aria-labelledby="focus-heading">
+          <div class="focus-orbit" aria-hidden="true"><span></span></div>
+          <h2 id="focus-heading">Make room to focus</h2>
+          <p>Small, steady study sessions add up. Pick one task and get started.</p>
+          <button class="text-button" id="focusTipButton" type="button">Show a tip <span aria-hidden="true">↗</span></button>
+        </section>
+
+        <div class="sidebar-footer">
+          <span class="avatar" aria-hidden="true">S</span>
+          <div><strong>Student workspace</strong><small>Personal planner</small></div>
+          <span class="more-dots" aria-hidden="true">···</span>
+        </div>
+      </aside>
+
+      <main id="top" class="main-content">
+        <header class="topbar">
+          <div class="breadcrumb"><span>Workspace</span><span class="crumb-divider">/</span><strong>My planner</strong></div>
+          <div class="topbar-actions">
+            <button class="icon-button" type="button" aria-label="Notifications" title="Notifications">♧<span class="notification-dot"></span></button>
+            <span class="avatar avatar-small" aria-label="Student profile">S</span>
+          </div>
+        </header>
+
+        <section class="welcome-row" id="planner">
+          <div>
+            <p class="eyebrow" id="todayLabel">TUESDAY, OCTOBER 13</p>
+            <h1>Your study dashboard</h1>
+            <p class="welcome-copy">A clear plan makes it easier to focus on what matters.</p>
+          </div>
+          <button class="primary-button" id="addTaskButton" type="button"><span aria-hidden="true">＋</span> Add a task</button>
+        </section>
+
+        <section class="stat-grid" aria-label="Study summary">
+          <article class="stat-card stat-violet">
+            <div class="stat-top"><span class="stat-icon">▤</span><span class="stat-note">This week</span></div>
+            <strong class="stat-number" id="weekCount">0</strong>
+            <span class="stat-label">Planned tasks</span>
+            <div class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </article>
+          <article class="stat-card stat-green">
+            <div class="stat-top"><span class="stat-icon">✓</span><span class="stat-note">Nice work</span></div>
+            <strong class="stat-number" id="doneCount">0</strong>
+            <span class="stat-label">Tasks completed</span>
+            <div class="mini-progress"><span id="doneProgress"></span></div>
+          </article>
+          <article class="stat-card stat-orange">
+            <div class="stat-top"><span class="stat-icon">◷</span><span class="stat-note">Keep an eye on</span></div>
+            <strong class="stat-number" id="todayCount">0</strong>
+            <span class="stat-label">Due today</span>
+            <span class="stat-foot" id="todayFoot">You have time to make a plan.</span>
+          </article>
+          <article class="stat-card stat-blue">
+            <div class="stat-top"><span class="stat-icon">◈</span><span class="stat-note">Across your courses</span></div>
+            <strong class="stat-number" id="subjectCount">0</strong>
+            <span class="stat-label">Active subjects</span>
+            <span class="subject-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <div class="panel task-panel">
+            <div class="panel-heading">
+              <div><h2>Study plan</h2><p>Keep your next steps in one place.</p></div>
+              <button class="more-button" id="sortButton" type="button" aria-label="Sort tasks" title="Sort by due date">↕</button>
+            </div>
+            <div class="task-toolbar">
+              <div class="tabs" role="tablist" aria-label="Filter tasks">
+                <button class="tab is-selected" type="button" role="tab" aria-selected="true" data-filter="all">All tasks <span id="allTabCount">0</span></button>
+                <button class="tab" type="button" role="tab" aria-selected="false" data-filter="today">Today</button>
+                <button class="tab" type="button" role="tab" aria-selected="false" data-filter="upcoming">Upcoming</button>
+                <button class="tab" type="button" role="tab" aria-selected="false" data-filter="completed">Completed</button>
+              </div>
+              <label class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search tasks" aria-label="Search tasks" /></label>
+            </div>
+            <div class="task-list" id="taskList" aria-live="polite"></div>
+            <div class="empty-state" id="emptyState" hidden>
+              <span class="empty-icon" aria-hidden="true">✦</span>
+              <h3>No tasks here yet</h3>
+              <p>Add a task to turn your plan into a next step.</p>
+              <button class="text-button" id="emptyAddButton" type="button">Create your first task <span aria-hidden="true">→</span></button>
+            </div>
+            <div class="panel-bottom"><span id="taskSummary">Your study plan is ready.</span><button class="text-button" id="clearCompletedButton" type="button">Clear completed</button></div>
+          </div>
+
+          <aside class="right-column">
+            <section class="panel week-panel" id="week">
+              <div class="panel-heading compact-heading"><div><h2>This week</h2><p id="weekRange">Your progress at a glance</p></div><span class="calendar-icon" aria-hidden="true">▦</span></div>
+              <div class="week-progress-row"><div class="week-ring" id="weekRing"><span><strong id="weekPercent">0%</strong><small>done</small></span></div><div><strong id="weekDoneLine">0 of 0 tasks</strong><p>completed this week</p></div></div>
+              <div class="week-days" id="weekDays" aria-label="Weekly task distribution"></div>
+              <div class="legend"><span><i class="legend-dot planned"></i>Planned</span><span><i class="legend-dot complete"></i>Completed</span></div>
+            </section>
+
+            <section class="panel subjects-panel" id="subjects">
+              <div class="panel-heading compact-heading"><div><h2>Focus subjects</h2><p>Where your time is going</p></div><button class="more-button" id="subjectsInfoButton" type="button" aria-label="About focus subjects" title="Subjects are based on your tasks">i</button></div>
+              <div class="subject-list" id="subjectList"></div>
+            </section>
+
+            <section class="quote-card">
+              <span class="quote-mark" aria-hidden="true">“</span>
+              <p id="studyTip">Start with a 25-minute focus session. One small step is enough to build momentum.</p>
+              <span class="quote-byline">A gentle reminder</span>
+            </section>
+          </aside>
+        </section>
+        <footer class="page-footer"><span>FocusFlow Study Planner</span><span>Progress grows one session at a time.</span></footer>
+      </main>
+    </div>
+
+    <dialog class="task-dialog" id="taskDialog" aria-labelledby="dialogTitle">
+      <form id="taskForm" method="dialog">
+        <div class="dialog-header"><div><p class="eyebrow">YOUR STUDY PLAN</p><h2 id="dialogTitle">Add a task</h2></div><button class="dialog-close" type="button" id="closeDialogButton" aria-label="Close">×</button></div>
+        <label class="field-label" for="taskTitle">Task name</label>
+        <input class="form-input" id="taskTitle" name="title" maxlength="90" placeholder="e.g. Review database normalization" required />
+        <div class="form-row">
+          <div><label class="field-label" for="taskSubject">Subject</label><input class="form-input" id="taskSubject" name="subject" maxlength="32" placeholder="e.g. Databases" required /></div>
+          <div><label class="field-label" for="taskDue">Due date</label><input class="form-input" id="taskDue" name="due" type="date" required /></div>
+        </div>
+        <div class="form-row">
+          <div><label class="field-label" for="taskPriority">Priority</label><select class="form-input" id="taskPriority" name="priority"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select></div>
+          <div><label class="field-label" for="taskDuration">Study time</label><select class="form-input" id="taskDuration" name="duration"><option value="25">25 minutes</option><option value="45">45 minutes</option><option value="60">1 hour</option><option value="90">1.5 hours</option><option value="120">2 hours</option></select></div>
+        </div>
+        <p class="form-error" id="formError" role="alert" hidden></p>
+        <div class="dialog-actions"><button class="secondary-button" type="button" id="cancelDialogButton">Cancel</button><button class="primary-button" type="submit">Save task</button></div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
